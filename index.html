@@ -25,28 +25,6 @@
 
         init();
 
-        document.addEventListener('keydown', function(event) {
-            var code = event.keyCode;
-
-            if (code == 37)
-                avatar.position.x = avatar.position.x - 5; // left
-
-            if (code == 38)
-                avatar.position.z = avatar.position.z - 5; // up
-
-            if (code == 39)
-                avatar.position.x = avatar.position.x + 5; // right
-
-            if (code == 40)
-                avatar.position.z = avatar.position.z + 5; // down
-
-            if (code == 67)
-                isCartWheeling = !isCartWheeling;
-
-            if (code == 70)
-                isFlipping = !isFlipping;
-        });
-
         function init() {
             // create a new scene that we will add objects to.
             scene = new THREE.Scene();          

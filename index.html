@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content = "width = device-width, initial-scale = 1, user-scalable = no" />
+    <title>Blender 3D and Three.js</title>
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="css/style.css"> 
+</head>
+
+<body id="home">
+
+    <div id="container"></div>
+
+    <script type="text/javascript" src="js/three.js"></script>
+    <script type="text/javascript">
+        var camera, scene, manager, renderer;
+        var avatar;
+        var isCartWheeling = false;
+        var isFlipping = false;
+
+        init();
+
+        document.addEventListener('keydown', function(event) {
+            var code = event.keyCode;
+
+            if (code == 37)
+                avatar.position.x = avatar.position.x - 5; // left
+
+            if (code == 38)
+                avatar.position.z = avatar.position.z - 5; // up
+
+            if (code == 39)
+                avatar.position.x = avatar.position.x + 5; // right
+
+            if (code == 40)
+                avatar.position.z = avatar.position.z + 5; // down
+
+            if (code == 67)
+                isCartWheeling = !isCartWheeling;
+
+            if (code == 70)
+                isFlipping = !isFlipping;
+        });
+
+        function init() {
+            // create a new scene that we will add objects to.
+            scene = new THREE.Scene();          
+
+            // create a camera and add it to the scene.
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+            camera.position.z = 500;
+            scene.add(camera);
+
+            // create a new material that we will put on the outside of our object.
+            var material = new THREE.MeshNormalMaterial({
+                color: 0xfff9e7
+            });
+
+            var cover = new THREE.MeshNormalMaterial();
+            var body = new THREE.SphereGeometry(25);
+            avatar = new THREE.Mesh(body, cover);
+            scene.add(avatar);
+
+            var hand = new THREE.SphereGeometry(10);
+
+            var right_hand = new THREE.Mesh(hand, cover);
+            right_hand.position.set(-35, 0, 0);
+            avatar.add(right_hand);
+
+            var left_hand = new THREE.Mesh(hand, cover);
+            left_hand.position.set(35, 0, 0);
+            avatar.add(left_hand);
+
+            var foot = new THREE.SphereGeometry(10);
+
+            var right_foot = new THREE.Mesh(foot, cover);
+            right_foot.position.set(-10, -30, 0);
+            avatar.add(right_foot);
+
+            var left_foot = new THREE.Mesh(foot, cover);
+            left_foot.position.set(10, -30, 0);
+            avatar.add(left_foot);
+
+            // create a renderer to draw the scene on the screen. 
+            renderer = new THREE.WebGLRenderer();
+            renderer.setClearColor(0x000000);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // call our animate function to start moving the object.
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (isCartWheeling)
+                avatar.rotation.z = avatar.rotation.z + 0.05;
+
+            if (isFlipping)
+                avatar.rotation.x = avatar.rotation.x + 0.05;
+
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>
